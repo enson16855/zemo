@@ -2,6 +2,7 @@ package com.zeven;
 
 import javax.servlet.MultipartConfigElement;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
@@ -10,15 +11,26 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.zeven.bean.Author;
 
 @ImportResource({ "classpath:spring-mvc.xml" })
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.zeven")
 @EnableAsync
 public class ZemoApplication extends SpringBootServletInitializer
 		implements WebApplicationInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ZemoApplication.class, args);
+	}
+	
+	@Autowired
+	private Author author;
+
+	@RequestMapping("/")
+	public String index() {
+		return "Hello " + author.getName() + ",Your age is " + author.getAge();
 	}
 
 	@Bean
